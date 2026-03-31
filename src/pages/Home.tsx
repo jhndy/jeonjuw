@@ -204,13 +204,13 @@ export default function Home({ setPage }: { setPage: (page: string) => void }) {
 
           <div className="grid md:grid-cols-3 gap-5">
             <div 
-              onClick={() => setPage('traffic')}
+              onClick={() => setPage('/traffic')}
               className="group bg-navy-800 hover:bg-navy-700 border border-navy-700 hover:border-navy-500 shadow-lg hover:shadow-xl p-8 rounded-3xl transition-all cursor-pointer flex flex-col h-full"
             >
               <div className="w-12 h-12 bg-navy-900 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <Car className="w-6 h-6 text-navy-200 group-hover:text-white transition-colors" />
               </div>
-              <h4 className="text-lg font-bold mb-3">교통사고 입원·통원</h4>
+              <h4 className="text-lg font-bold mb-3">교통사고 입원 · 통원</h4>
               <p className="text-sm text-navy-200 leading-relaxed break-keep flex-grow mb-8">
                 사고 후 남는 통증과 불편에 대해, 입원과 통원 중 현재 상태에 맞는 회복 방향을 안내합니다.
               </p>
@@ -220,7 +220,7 @@ export default function Home({ setPage }: { setPage: (page: string) => void }) {
             </div>
             
             <div 
-              onClick={() => setPage('diet')}
+              onClick={() => setPage('/diet')}
               className="group bg-navy-800 hover:bg-navy-700 border border-navy-700 hover:border-navy-500 shadow-lg hover:shadow-xl p-8 rounded-3xl transition-all cursor-pointer flex flex-col h-full"
             >
               <div className="w-12 h-12 bg-navy-900 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
@@ -236,7 +236,7 @@ export default function Home({ setPage }: { setPage: (page: string) => void }) {
             </div>
             
             <div 
-              onClick={() => setPage('metabolic')}
+              onClick={() => setPage('/metabolic')}
               className="group bg-navy-800 hover:bg-navy-700 border border-navy-700 hover:border-navy-500 shadow-lg hover:shadow-xl p-8 rounded-3xl transition-all cursor-pointer flex flex-col h-full"
             >
               <div className="w-12 h-12 bg-navy-900 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
@@ -360,15 +360,18 @@ export default function Home({ setPage }: { setPage: (page: string) => void }) {
             <div className="space-y-5 text-base text-navy-700">
               <div className="flex justify-between items-center border-b border-beige-200 pb-3">
                 <span className="font-bold">평일</span>
-                <span>08:30 ~ 18:00 <span className="text-navy-500 text-xs ml-1.5">(점심 12:30 ~ 14:00)</span></span>
+                <span>09:00 ~ 19:30 <span className="text-navy-500 text-xs ml-1.5">(점심 12:30 ~ 14:00)</span></span>
               </div>
               <div className="flex justify-between items-center border-b border-beige-200 pb-3">
                 <span className="font-bold text-navy-900">토요일</span>
-                <span>08:30 ~ 13:00 <span className="text-navy-500 text-xs ml-1.5">(점심시간 없이 진료)</span></span>
+                <span>08:30 ~ 14:00 <span className="text-navy-500 text-xs ml-1.5">(점심시간 없이 진료)</span></span>
               </div>
-              <div className="flex justify-between items-center pb-3">
+              <div className="flex justify-between items-start pb-3">
                 <span className="font-bold text-red-500">일요일 및 공휴일</span>
-                <span className="text-red-500 font-medium">휴진</span>
+                <div className="text-right">
+                  <span className="text-red-500 font-medium block">휴진</span>
+                  <span className="text-[11px] text-navy-400 break-keep">(교통사고 환자 입원 가능)</span>
+                </div>
               </div>
               <div className="flex items-center gap-2 pt-4 border-t border-beige-200 text-navy-900">
                 <Phone className="w-5 h-5" />
@@ -376,7 +379,7 @@ export default function Home({ setPage }: { setPage: (page: string) => void }) {
               </div>
             </div>
             <button 
-              onClick={() => setPage('guide')} 
+              onClick={() => setPage('/guide')} 
               className="mt-6 w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3.5 bg-navy-50 text-navy-900 rounded-xl text-sm font-bold hover:bg-navy-900 hover:text-white shadow-sm hover:shadow-md transition-all duration-300"
             >
               진료 안내 더 보기 <ArrowRight className="w-4 h-4" />

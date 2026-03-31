@@ -1,7 +1,11 @@
-import { motion } from "motion/react";
-import { MapPin, Car, Bus, Footprints, CheckCircle2, HelpCircle, Map, MessageCircle, Phone, Wifi, Users, Accessibility } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { MapPin, Car, Bus, Footprints, CheckCircle2, HelpCircle, Map, MessageCircle, Phone, Wifi, Users, Accessibility, Maximize2, X, ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function Location() {
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+  const entranceImages = ["/image/parking1.png", "/image/parking2.png"];
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -110,6 +114,131 @@ export default function Location() {
         </div>
       </section>
 
+      {/* Detailed Entrance Guide */}
+      <section className="py-24 px-6 bg-beige-50">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="text-navy-500 font-bold tracking-wider text-sm mb-4 block">ENTRANCE GUIDE</span>
+            <h3 className="text-3xl md:text-4xl font-bold text-navy-900 mb-6">📍 한의원 진입로 상세 안내</h3>
+            <p className="text-navy-600 break-keep max-w-2xl mx-auto">
+              전주W한의원은 총 3개의 진입로가 마련되어 있습니다.<br />
+              현재 위치에서 가장 가까운 입구를 확인해 보세요.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-10">
+            {/* Entrance 1 & 2 */}
+            <div className="space-y-6">
+              <div className="bg-white p-6 rounded-3xl shadow-sm border border-beige-200">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-navy-900 text-white rounded-full flex items-center justify-center font-bold">1,2</div>
+                  <h4 className="text-xl font-bold text-navy-900">자차 및 도로 진입로</h4>
+                </div>
+                <p className="text-navy-700 text-sm mb-6 break-keep">
+                  건물 전면 도로 및 주차장 입구를 통해 진입하실 수 있는 공용 출입구입니다. 자차 이용 시 2층 주차장으로 바로 올라오시면 편리합니다.
+                </p>
+                <div 
+                  className="rounded-2xl overflow-hidden border border-beige-100 shadow-inner cursor-pointer group relative"
+                  onClick={() => setSelectedImageIndex(0)}
+                >
+                  <img 
+                    src="/image/parking1.png" 
+                    alt="자차 및 도로 진입로 안내" 
+                    className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                    <Maximize2 className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Entrance 3 */}
+            <div className="space-y-6">
+              <div className="bg-white p-6 rounded-3xl shadow-sm border border-beige-200">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-navy-900 text-white rounded-full flex items-center justify-center font-bold">3</div>
+                  <h4 className="text-xl font-bold text-navy-900">도보 전용 진입로</h4>
+                </div>
+                <p className="text-navy-700 text-sm mb-6 break-keep">
+                  상가 측면의 도보 전용 계단 및 입구를 통해 2층으로 바로 연결되는 출입구입니다. 도보 방문 시 가장 빠른 경로입니다.
+                </p>
+                <div 
+                  className="rounded-2xl overflow-hidden border border-beige-100 shadow-inner cursor-pointer group relative"
+                  onClick={() => setSelectedImageIndex(1)}
+                >
+                  <img 
+                    src="/image/parking2.png" 
+                    alt="도보 전용 진입로 안내" 
+                    className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                    <Maximize2 className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Lightbox Modal */}
+      <AnimatePresence>
+        {selectedImageIndex !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4 md:p-10"
+            onClick={() => setSelectedImageIndex(null)}
+          >
+            <button 
+              className="absolute top-6 right-6 text-white/70 hover:text-white z-[110]"
+              onClick={(e) => { e.stopPropagation(); setSelectedImageIndex(null); }}
+            >
+              <X className="w-8 h-8" />
+            </button>
+
+            <div className="relative w-full max-w-5xl aspect-[4/3] md:aspect-video flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+              <button 
+                className="absolute left-0 md:-left-16 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedImageIndex((prev) => (prev !== null ? (prev - 1 + entranceImages.length) % entranceImages.length : null));
+                }}
+              >
+                <ChevronLeft className="w-10 h-10 md:w-12 md:h-12" />
+              </button>
+
+              <motion.img
+                key={selectedImageIndex}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                src={entranceImages[selectedImageIndex]}
+                alt={`Entrance Full ${selectedImageIndex + 1}`}
+                className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+              />
+
+              <button 
+                className="absolute right-0 md:-right-16 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedImageIndex((prev) => (prev !== null ? (prev + 1) % entranceImages.length : null));
+                }}
+              >
+                <ChevronRight className="w-10 h-10 md:w-12 md:h-12" />
+              </button>
+
+              <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 text-white/70 font-medium">
+                {selectedImageIndex + 1} / {entranceImages.length}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Facilities */}
       <section className="py-24 px-6 bg-beige-50">
         <div className="max-w-5xl mx-auto">
@@ -189,6 +318,7 @@ export default function Location() {
       <section className="py-24 px-6 bg-white">
         <div className="max-w-5xl mx-auto">
           <h3 className="text-2xl md:text-3xl font-bold text-center mb-12 text-navy-900">빠른 길 찾기 및 문의</h3>
+          
           <div className="grid md:grid-cols-3 gap-6">
             <a 
               href="https://map.naver.com/p/search/%EC%A0%84%EC%A3%BCw%ED%95%9C%EC%9D%98%EC%9B%90/place/1999496121?placePath=/home?bk_query=%EC%A0%84%EC%A3%BCw%ED%95%9C%EC%9D%98%EC%9B%90&entry=pll&from=nx&fromNxList=true&fromPanelNum=2&timestamp=202603161658&locale=ko&svcName=map_pcv5&searchText=%EC%A0%84%EC%A3%BCw%ED%95%9C%EC%9D%98%EC%9B%90&searchType=place&c=15.00,0,0,0,dh" 

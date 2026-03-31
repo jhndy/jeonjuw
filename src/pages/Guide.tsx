@@ -37,7 +37,7 @@ export default function Guide() {
             <div className="space-y-6 text-lg text-navy-700">
               <div className="flex justify-between items-center border-b border-beige-200 pb-4">
                 <span className="font-bold text-navy-900">평일</span>
-                <span>08:30 ~ 18:00</span>
+                <span>09:00 ~ 19:30</span>
               </div>
               <div className="flex justify-between items-center border-b border-beige-200 pb-4">
                 <span className="font-bold text-navy-500">점심 시간</span>
@@ -46,13 +46,16 @@ export default function Guide() {
               <div className="flex justify-between items-center border-b border-beige-200 pb-4">
                 <span className="font-bold text-navy-900">토요일</span>
                 <div className="text-right">
-                  <span className="block">08:30 ~ 13:00</span>
+                  <span className="block">08:30 ~ 14:00</span>
                   <span className="text-sm text-navy-500">(점심시간 없이 진료)</span>
                 </div>
               </div>
-              <div className="flex justify-between items-center pb-2">
+              <div className="flex justify-between items-start pb-2">
                 <span className="font-bold text-red-500">일요일 및 공휴일</span>
-                <span className="text-red-500 font-medium">휴진</span>
+                <div className="text-right">
+                  <span className="text-red-500 font-medium block">휴진</span>
+                  <span className="text-xs text-navy-400 mt-1 break-keep">(교통사고 환자 입원 가능)</span>
+                </div>
               </div>
             </div>
           </div>
@@ -157,7 +160,7 @@ export default function Guide() {
                 <span className="pt-0.5 break-keep">토요일에도 진료하나요?</span>
               </h4>
               <p className="text-navy-600 leading-relaxed break-keep pl-10">
-                네, 토요일은 오전 08:30부터 13:00까지 진료합니다. 토요일은 점심시간 없이 운영되니 편하게 내원해 주세요.
+                네, 토요일은 오전 08:30부터 14:00까지 진료합니다. 토요일은 점심시간 없이 운영되니 편하게 내원해 주세요.
               </p>
             </div>
             

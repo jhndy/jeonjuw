@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { ChevronDown, Menu, X, MessageCircle, ChevronRight, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import TrafficAccident from "./pages/TrafficAccident";
@@ -9,36 +10,42 @@ import Metabolic from "./pages/Metabolic";
 import Guide from "./pages/Guide";
 import Location from "./pages/Location";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TrafficAccidentNew from "./pages/TrafficAccidentNew";
 import ClinicFooter from "./components/ClinicFooter";
 import Logo from "./components/Logo";
 import FloatingButtons from "./components/FloatingButtons";
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState('home');
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Scroll to top whenever the page changes
+  // Scroll to top whenever the path changes
   useEffect(() => {
     window.scrollTo(0, 0);
     setIsMobileMenuOpen(false); // Close mobile menu on page change
-  }, [currentPage]);
+  }, [location.pathname]);
 
   const navItems = [
-    { id: 'home', label: '홈' },
-    { id: 'about', label: '한의원 소개' },
+    { id: 'home', label: '홈', path: '/' },
+    { id: 'about', label: '한의원 소개', path: '/about' },
     { 
       id: 'services', 
       label: '진료 분야',
       subItems: [
-        { id: 'traffic', label: '교통사고 입원·통원' },
-        { id: 'diet', label: '체중 감량·체질 개선' },
-        { id: 'metabolic', label: '고혈압·고지혈증·당뇨' },
+        { id: 'traffic', label: '교통사고 입원·통원(숨김)', path: '/traffic-hidden' },
+        { id: 'traffic_new', label: '교통사고 입원 · 통원', path: '/traffic' },
+        { id: 'diet', label: '체중 감량·체질 개선', path: '/diet' },
+        { id: 'metabolic', label: '고혈압·고지혈증·당뇨', path: '/metabolic' },
       ]
     },
-    { id: 'guide', label: '진료 안내' },
-    { id: 'location', label: '오시는 길 / 문의' },
+    { id: 'guide', label: '진료 안내', path: '/guide' },
+    { id: 'location', label: '오시는 길 / 문의', path: '/location' },
   ];
+
+  const isPathActive = (path: string) => location.pathname === path;
+  const isServiceActive = () => ['/traffic', '/traffic-hidden', '/diet', '/metabolic'].includes(location.pathname);
 
   return (
     <div className="min-h-screen bg-beige-50 text-navy-800 font-sans selection:bg-beige-200 flex flex-col">
@@ -48,7 +55,7 @@ export default function App() {
           {/* Logo */}
           <div 
             className="flex items-center cursor-pointer"
-            onClick={() => setCurrentPage('home')}
+            onClick={() => navigate('/')}
           >
             <Logo variant="navy" className="h-10 md:h-12" />
           </div>
@@ -56,14 +63,14 @@ export default function App() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-2 text-[15px] font-medium text-navy-600">
             <button 
-              onClick={() => setCurrentPage('home')} 
-              className={`transition-all px-4 py-2 rounded-full ${currentPage === 'home' ? 'text-navy-900 font-bold bg-navy-50' : 'text-navy-600 hover:text-navy-900 hover:bg-navy-50'}`}
+              onClick={() => navigate('/')} 
+              className={`transition-all px-4 py-2 rounded-full ${isPathActive('/') ? 'text-navy-900 font-bold bg-navy-50' : 'text-navy-600 hover:text-navy-900 hover:bg-navy-50'}`}
             >
               홈
             </button>
             <button 
-              onClick={() => setCurrentPage('about')} 
-              className={`transition-all px-4 py-2 rounded-full ${currentPage === 'about' ? 'text-navy-900 font-bold bg-navy-50' : 'text-navy-600 hover:text-navy-900 hover:bg-navy-50'}`}
+              onClick={() => navigate('/about')} 
+              className={`transition-all px-4 py-2 rounded-full ${isPathActive('/about') ? 'text-navy-900 font-bold bg-navy-50' : 'text-navy-600 hover:text-navy-900 hover:bg-navy-50'}`}
             >
               한의원 소개
             </button>
@@ -74,27 +81,27 @@ export default function App() {
               onMouseEnter={() => setIsDropdownOpen(true)}
               onMouseLeave={() => setIsDropdownOpen(false)}
             >
-              <button className={`flex items-center gap-1 transition-all px-4 py-2 rounded-full ${['traffic', 'diet', 'metabolic'].includes(currentPage) ? 'text-navy-900 font-bold bg-navy-50' : 'text-navy-600 hover:text-navy-900 hover:bg-navy-50'}`}>
+              <button className={`flex items-center gap-1 transition-all px-4 py-2 rounded-full ${isServiceActive() ? 'text-navy-900 font-bold bg-navy-50' : 'text-navy-600 hover:text-navy-900 hover:bg-navy-50'}`}>
                 진료 분야 <ChevronDown className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
               
               {/* Dropdown Content */}
               <div className={`absolute left-1/2 -translate-x-1/2 top-full mt-1 w-56 bg-white border border-beige-200 shadow-xl rounded-xl transition-all duration-200 flex flex-col py-2 overflow-hidden ${isDropdownOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
                 <button 
-                  onClick={() => { setCurrentPage('traffic'); setIsDropdownOpen(false); }}
-                  className={`px-5 py-3 text-left transition-all text-sm border-l-4 ${currentPage === 'traffic' ? 'text-navy-900 font-bold bg-navy-50 border-navy-800' : 'text-navy-600 hover:text-navy-900 hover:bg-navy-50 hover:border-navy-300 border-transparent'}`}
+                  onClick={() => { navigate('/traffic'); setIsDropdownOpen(false); }}
+                  className={`px-5 py-3 text-left transition-all text-sm border-l-4 ${isPathActive('/traffic') ? 'text-navy-900 font-bold bg-navy-50 border-navy-800' : 'text-navy-600 hover:text-navy-900 hover:bg-navy-50 hover:border-navy-300 border-transparent'}`}
                 >
-                  교통사고 입원·통원
+                  교통사고 입원 · 통원
                 </button>
                 <button 
-                  onClick={() => { setCurrentPage('diet'); setIsDropdownOpen(false); }}
-                  className={`px-5 py-3 text-left transition-all text-sm border-l-4 ${currentPage === 'diet' ? 'text-navy-900 font-bold bg-navy-50 border-navy-800' : 'text-navy-600 hover:text-navy-900 hover:bg-navy-50 hover:border-navy-300 border-transparent'}`}
+                  onClick={() => { navigate('/diet'); setIsDropdownOpen(false); }}
+                  className={`px-5 py-3 text-left transition-all text-sm border-l-4 ${isPathActive('/diet') ? 'text-navy-900 font-bold bg-navy-50 border-navy-800' : 'text-navy-600 hover:text-navy-900 hover:bg-navy-50 hover:border-navy-300 border-transparent'}`}
                 >
                   체중 감량·체질 개선
                 </button>
                 <button 
-                  onClick={() => { setCurrentPage('metabolic'); setIsDropdownOpen(false); }}
-                  className={`px-5 py-3 text-left transition-all text-sm border-l-4 ${currentPage === 'metabolic' ? 'text-navy-900 font-bold bg-navy-50 border-navy-800' : 'text-navy-600 hover:text-navy-900 hover:bg-navy-50 hover:border-navy-300 border-transparent'}`}
+                  onClick={() => { navigate('/metabolic'); setIsDropdownOpen(false); }}
+                  className={`px-5 py-3 text-left transition-all text-sm border-l-4 ${isPathActive('/metabolic') ? 'text-navy-900 font-bold bg-navy-50 border-navy-800' : 'text-navy-600 hover:text-navy-900 hover:bg-navy-50 hover:border-navy-300 border-transparent'}`}
                 >
                   고혈압·고지혈증·당뇨
                 </button>
@@ -102,14 +109,14 @@ export default function App() {
             </div>
             
             <button 
-              onClick={() => setCurrentPage('guide')} 
-              className={`transition-all px-4 py-2 rounded-full ${currentPage === 'guide' ? 'text-navy-900 font-bold bg-navy-50' : 'text-navy-600 hover:text-navy-900 hover:bg-navy-50'}`}
+              onClick={() => navigate('/guide')} 
+              className={`transition-all px-4 py-2 rounded-full ${isPathActive('/guide') ? 'text-navy-900 font-bold bg-navy-50' : 'text-navy-600 hover:text-navy-900 hover:bg-navy-50'}`}
             >
               진료 안내
             </button>
             <button 
-              onClick={() => setCurrentPage('location')} 
-              className={`transition-all px-4 py-2 rounded-full ${currentPage === 'location' ? 'text-navy-900 font-bold bg-navy-50' : 'text-navy-600 hover:text-navy-900 hover:bg-navy-50'}`}
+              onClick={() => navigate('/location')} 
+              className={`transition-all px-4 py-2 rounded-full ${isPathActive('/location') ? 'text-navy-900 font-bold bg-navy-50' : 'text-navy-600 hover:text-navy-900 hover:bg-navy-50'}`}
             >
               오시는 길 / 문의
             </button>
@@ -162,9 +169,9 @@ export default function App() {
                       {item.subItems ? (
                         <div className="py-2">
                           <button
-                            onClick={() => setCurrentPage(item.id === 'services' ? 'traffic' : item.id)}
+                            onClick={() => navigate('/traffic')}
                             className={`w-full flex items-center px-4 py-3 rounded-xl text-[15px] font-bold transition-all ${
-                              ['traffic', 'diet', 'metabolic'].includes(currentPage) && item.id === 'services'
+                              isServiceActive() && item.id === 'services'
                                 ? 'bg-navy-50 text-navy-900' 
                                 : 'text-navy-900 hover:bg-beige-50'
                             }`}
@@ -173,25 +180,27 @@ export default function App() {
                           </button>
                           <div className="mt-1 space-y-1">
                             {item.subItems.map((sub) => (
-                              <button
-                                key={sub.id}
-                                onClick={() => setCurrentPage(sub.id)}
-                                className={`w-full flex items-center px-8 py-3 rounded-xl text-[14px] transition-all ${
-                                  currentPage === sub.id 
-                                    ? 'bg-navy-50 text-navy-900 font-bold' 
-                                    : 'text-navy-600 hover:bg-beige-50'
-                                }`}
-                              >
-                                {sub.label}
-                              </button>
+                              sub.id !== 'traffic' && (
+                                <button
+                                  key={sub.id}
+                                  onClick={() => navigate(sub.path!)}
+                                  className={`w-full flex items-center px-8 py-3 rounded-xl text-[14px] transition-all ${
+                                    isPathActive(sub.path!) 
+                                      ? 'bg-navy-50 text-navy-900 font-bold' 
+                                      : 'text-navy-600 hover:bg-beige-50'
+                                  }`}
+                                >
+                                  {sub.label}
+                                </button>
+                              )
                             ))}
                           </div>
                         </div>
                       ) : (
                         <button
-                          onClick={() => setCurrentPage(item.id)}
+                          onClick={() => navigate(item.path!)}
                           className={`w-full flex items-center px-4 py-3 rounded-xl text-[15px] font-bold transition-all ${
-                            currentPage === item.id 
+                            isPathActive(item.path!) 
                               ? 'bg-navy-50 text-navy-900' 
                               : 'text-navy-900 hover:bg-beige-50'
                           }`}
@@ -234,18 +243,21 @@ export default function App() {
 
       {/* Main Content Area */}
       <main className="flex-grow flex flex-col items-center w-full">
-        {currentPage === 'home' && <Home setPage={setCurrentPage} />}
-        {currentPage === 'about' && <About />}
-        {currentPage === 'traffic' && <TrafficAccident />}
-        {currentPage === 'diet' && <Diet />}
-        {currentPage === 'metabolic' && <Metabolic />}
-        {currentPage === 'guide' && <Guide />}
-        {currentPage === 'location' && <Location />}
-        {currentPage === 'privacy' && <PrivacyPolicy />}
+        <Routes>
+          <Route path="/" element={<Home setPage={navigate} />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/traffic-hidden" element={<TrafficAccident />} />
+          <Route path="/traffic" element={<TrafficAccidentNew setPage={navigate} />} />
+          <Route path="/diet" element={<Diet />} />
+          <Route path="/metabolic" element={<Metabolic />} />
+          <Route path="/guide" element={<Guide />} />
+          <Route path="/location" element={<Location />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+        </Routes>
       </main>
 
       {/* Footer */}
-      {currentPage === 'home' ? (
+      {location.pathname === '/' ? (
         <footer className="bg-navy-900 text-navy-50/70 py-12 px-6 border-t border-navy-800 mt-auto">
           <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
             <div className="flex items-center">
@@ -257,7 +269,7 @@ export default function App() {
                 <span className="font-bold">063-221-7500</span>
               </div>
               <button 
-                onClick={() => setCurrentPage('privacy')}
+                onClick={() => navigate('/privacy')}
                 className="text-sm hover:text-white transition-colors"
               >
                 개인정보처리방침
@@ -269,7 +281,7 @@ export default function App() {
           </div>
         </footer>
       ) : (
-        <ClinicFooter setCurrentPage={setCurrentPage} />
+        <ClinicFooter setCurrentPage={navigate} />
       )}
     </div>
   );
